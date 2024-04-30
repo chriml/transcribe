@@ -1,5 +1,5 @@
 <template>
-    <div class="h-screen w-screen">
+    <div class="mt-4 h-full w-full items-center">
         <div class="main flex flex-col gap-4 justify-items-stretch" :class="{ 'h-5/6': !transcribing }">
             <h1 class="text-4xl">Transcribe your files</h1>
             <div v-if="!transcribing" class="dropzone-container shadow-inner h-5/6 w-full pt-2 px-4 overflow-scroll"
