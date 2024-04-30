@@ -27,12 +27,12 @@ const storage = multer.diskStorage({
   }); */
 
 // const upload = multer({ storage: storage });
-const splitDuration: number = 10; // Split every 10 seconds
+const splitDuration: number = 20; // Split every 10 seconds
 
 app.get('/', async (req: Request, res: Response) => { console.log("Get request"); res.send("Get your files transcrbed!"); });
 
 // Define a route for file upload
-app.post('/uploadSlow', upload.single('file'), async (req: Request, res: Response) => {
+app.post('/uploadFull', upload.single('file'), async (req: Request, res: Response) => {
     console.log("upload slow received");
 
     // Retrieve the file from the request object
@@ -48,7 +48,7 @@ app.post('/uploadSlow', upload.single('file'), async (req: Request, res: Respons
 });
 
 // Define a route for file upload
-app.post('/upload', upload.single('file'), async (req: Request, res: Response) => {
+app.post('/uploadParts', upload.single('file'), async (req: Request, res: Response) => {
     console.log("upload received");
 
     // Retrieve the file from the request object

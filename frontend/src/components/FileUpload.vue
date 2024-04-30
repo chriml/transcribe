@@ -22,7 +22,8 @@
             </div>
             <button :disabled="files.length == 0" class="button-39" @click="transcribe"><span>{{ transcribing ? 'Cancel'
             : 'Transcribe' }}</span></button>
-            <button v-if="!transcribing" :disabled="files.length == 0" class="button-39" @click="transcribeSlow"><span>Transcribe Slow</span></button>
+            <button v-if="!transcribing" :disabled="files.length == 0" class="button-39"
+                @click="transcribeSlow"><span>Transcribe Slow</span></button>
             <div v-if="transcribing" class="shadow-md border  rounded-3xl h-5/6 w-full pt-2 px-4 overflow-scroll"
                 @dragover="dragover" @dragleave="dragleave" @drop="drop">
 
@@ -94,16 +95,15 @@ async function transcribe() {
 
             const data = new FormData();
             data.append('file', files.value[index]);
-            fetch('https://transcribe-test.fly.dev/upload', {
+            fetch('https://transcribe-test.fly.dev/uploadFull', {
                 method: 'POST',
                 body: data
             }).then(async (response) => {
                 let result = await response.json();
                 transcriptions.value[index].text = result.transcript;
-                transcriptions.value[index].status= 'Done (' + Math.round(result.time / 1000) + ')';
+                transcriptions.value[index].status = 'Done (' + Math.round(result.time / 1000) + ')';
             });
         }
-           
 
     } else {
         transcriptions.value = [];
@@ -124,13 +124,13 @@ async function transcribeSlow() {
 
             const data = new FormData();
             data.append('file', files.value[index]);
-            fetch('https://transcribe-test.fly.dev/uploadSlow', {
+            fetch('https://transcribe-test.fly.dev/uploadParts', {
                 method: 'POST',
                 body: data
             }).then(async (response) => {
                 let result = await response.json();
                 transcriptions.value[index].text = result.transcript;
-                transcriptions.value[index].status= 'Done (' + Math.round(result.time / 1000) + ')';
+                transcriptions.value[index].status = 'Completed (' + Math.round(result.time / 1000) + 'sec)';
             });
         }
     } else {
