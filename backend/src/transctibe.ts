@@ -3,10 +3,9 @@
 import { AssemblyAI } from 'assemblyai'
 import { readdirSync } from 'fs'
 import { Writable } from 'stream'
+import 'dotenv/config';
 
-const client = new AssemblyAI({ apiKey: "63a9fa86b01547b4ad9f01a12d2c2aac" })
-
-const audioUrl = 'https://storage.googleapis.com/aai-web-samples/5_common_sports_injuries.mp3'
+const client = new AssemblyAI({ apiKey: process.env.ASSEMBLY_AI_SECRET || "" })
 
 export async function transcribeBuffer(buffer: Buffer): Promise<any> {
     /* if (transcript.status === 'error') {
@@ -29,9 +28,6 @@ export async function transcribe(dir: string): Promise<any> {
 }
 
 export async function transcribeFile(file: any): Promise<any> {
-
-
-
     /* if (transcript.status === 'error') {
         console.log(transcript.error)
     } */

@@ -3,7 +3,7 @@ import multer from 'multer';
 import { transcribe, transcribeBuffer } from './transctibe';
 import ffmpeg from 'fluent-ffmpeg';
 import { PassThrough, Readable } from 'stream';
-import { existsSync, mkdirSync } from 'fs';
+import { existsSync, mkdirSync, rmSync } from 'fs';
 import { performance } from 'perf_hooks';
 import cors from 'cors';
 
@@ -75,9 +75,7 @@ app.post('/uploadParts', upload.single('file'), async (req: Request, res: Respon
 
                 const transcript = await transcribe(outputDir);
                 const endtime = performance.now()
-
-                
-
+                rmSync(outputDir, { recursive: true, force: true });
                 res.send({ time: endtime - time, transcript: transcript.join(' ') });
 
             })
