@@ -44,7 +44,7 @@ app.post('/uploadFull', upload.single('file'), checkFile, async (req: Request, r
         const time = performance.now()
         const transcript = await transcribeSingle(file.buffer);
         const endtime = performance.now()
-        return res.send({ time: endtime - time, transcript });
+        return res.send({ time: endtime - time, ...transcript });
     } else {
         return res.status(400).send('No file uploaded.');
     }
@@ -80,7 +80,7 @@ app.post('/uploadParts', upload.single('file'), checkFile, async (req: Request, 
                 // remove tmp directory
                 rmSync(outputDir, { recursive: true, force: true });
 
-                res.send({ time: endtime - time, transcript: transcript.join(' ') });
+                res.send({ time: endtime - time, transcript: transcript.map(t => t.text).join(' '), keywords: transcript.map(t => t.keywords) });
             })
             .on('error', (err) => {
                 console.error('Error during splitting:', err);

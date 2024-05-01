@@ -5,13 +5,13 @@ import { readdirSync } from 'fs'
 const client = new AssemblyAI({ apiKey: process.env.ASSEMBLY_AI_SECRET || "" });
 
 // transcribe one file
-export async function transcribeSingle(source: FileUploadParams): Promise<any> {
-    const transcriptionResult = await client.transcripts.transcribe({ audio: source });
+export async function transcribeSingle(source: FileUploadParams): Promise<TranscriptResult> {
+    const transcriptionResult = await client.transcripts.transcribe({ audio: source, auto_highlights: true });
     return parseResult(transcriptionResult);
 }
 
 // transcribe directory
-export async function transcribeMultiple(dir: string): Promise<any> {
+export async function transcribeMultiple(dir: string): Promise<TranscriptResult[]> {
     let promises = readdirSync(dir).map(file => {
         return client.transcripts.transcribe({ audio: file });;
     });
@@ -19,9 +19,17 @@ export async function transcribeMultiple(dir: string): Promise<any> {
 }
 
 // check status and adjust transcript result accordingly
-function parseResult(result: Transcript) {
+function parseResult(result: Transcript): TranscriptResult {
     if (result.status === 'error') {
-        return "Could not parse transcript. Please try again...";
+        return { text: "Could not parse transcript. Please try again...", keywords: [] };
     }
-    return result.text
+    return {
+        text: result.text || '',
+        keywords: result.auto_highlights_result?.results.sort((a, b) => a.rank - b.rank).map(r => r.text) || ([] as string[])
+    }
+}
+
+type TranscriptResult = {
+    text: string;
+    keywords: string[];
 }

@@ -2,7 +2,8 @@
     <div class="mt-4 h-full w-full items-center">
         <div class="main flex flex-col gap-4 justify-items-stretch" :class="{ 'h-5/6': !transcribing }">
             <h1 class="text-4xl">Transcribe your files</h1>
-            <div v-if="!transcribing" class="rounded-3xl dropzone-container shadow-inner h-5/6 w-full pt-2 px-4 overflow-scroll"
+            <div v-if="!transcribing"
+                class="rounded-3xl dropzone-container shadow-inner h-5/6 w-full pt-2 px-4 overflow-scroll"
                 @dragover="dragover" @dragleave="dragleave" @drop="drop">
                 <input type="file" multiple name="file" id="fileInput" v-show="false" @change="onChange" ref="file"
                     accept="audio/*, video/*" />
@@ -20,10 +21,13 @@
                     </div>
                 </div>
             </div>
-            <button :disabled="files.length == 0" class="button-39" @click="transcribe"><span>{{ transcribing ? 'Cancel'
-            : 'Transcribe' }}</span></button>
-            <button v-if="!transcribing" :disabled="files.length == 0" class="button-39"
-                @click="transcribeSlow"><span>Transcribe Slow</span></button>
+            <div class="flex flex-row">
+                <button :disabled="files.length == 0" class="button-39" @click="transcribe"><span>{{ transcribing ?
+            'Cancel'
+            : 'Transcribe Complete' }}</span></button>
+                <button v-if="!transcribing" :disabled="files.length == 0" class="button-39"
+                    @click="transcribeSlow"><span>Transcribe Parts</span></button>
+            </div>
             <div v-if="transcribing" class="shadow-md border  rounded-3xl h-5/6 w-full pt-2 px-4 overflow-scroll"
                 @dragover="dragover" @dragleave="dragleave" @drop="drop">
 
@@ -101,7 +105,7 @@ async function transcribe() {
             }).then(async (response) => {
                 let result = await response.json();
                 transcriptions.value[index].text = result.transcript;
-                transcriptions.value[index].status = 'Done (' + Math.round(result.time / 1000) + ')';
+                transcriptions.value[index].status = 'Done (' + Math.round(result.time / 1000) + 'sec)';
             });
         }
 

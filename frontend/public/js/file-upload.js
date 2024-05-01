@@ -3778,12 +3778,12 @@ const Rn = (...e) => {
   class: "mb-auto"
 }, Cl = { class: "" }, Ol = ["onClick"], Sl = /* @__PURE__ */ W("span", null, "Delete", -1), Tl = [
   Sl
-], Pl = ["disabled"], Al = ["disabled"], Rl = /* @__PURE__ */ W("span", null, "Transcribe Slow", -1), Il = [
-  Rl
-], Nl = {
+], Pl = { class: "flex flex-row" }, Al = ["disabled"], Rl = ["disabled"], Il = /* @__PURE__ */ W("span", null, "Transcribe Parts", -1), Nl = [
+  Il
+], Ml = {
   key: 0,
   class: "m-4"
-}, Ml = { class: "w-full items-center justify-between flex flex-row" }, Dl = { class: "" }, Fl = { class: "text-left p-4 w-full mb-6 border rounded-2xl" }, Ul = /* @__PURE__ */ pr({
+}, Dl = { class: "w-full items-center justify-between flex flex-row" }, Fl = { class: "" }, Ul = { class: "text-left p-4 w-full mb-6 border rounded-2xl" }, Ll = /* @__PURE__ */ pr({
   __name: "FileUpload.ce",
   setup(e) {
     const t = rt(!1), s = rt(!1), n = rt([]), r = rt(), o = rt([]);
@@ -3819,7 +3819,7 @@ const Rn = (...e) => {
             body: F
           }).then(async (R) => {
             let V = await R.json();
-            o.value[w].text = V.transcript, o.value[w].status = "Done (" + Math.round(V.time / 1e3) + ")";
+            o.value[w].text = V.transcript, o.value[w].status = "Done (" + Math.round(V.time / 1e3) + "sec)";
           });
         }
       else
@@ -3891,37 +3891,39 @@ const Rn = (...e) => {
             ]))), 128))
           ]))
         ], 32)),
-        W("button", {
-          disabled: n.value.length == 0,
-          class: "button-39",
-          onClick: v
-        }, [
-          W("span", null, $e(s.value ? "Cancel" : "Transcribe"), 1)
-        ], 8, Pl),
-        s.value ? it("", !0) : (oe(), fe("button", {
-          key: 1,
-          disabled: n.value.length == 0,
-          class: "button-39",
-          onClick: C
-        }, Il, 8, Al)),
+        W("div", Pl, [
+          W("button", {
+            disabled: n.value.length == 0,
+            class: "button-39",
+            onClick: v
+          }, [
+            W("span", null, $e(s.value ? "Cancel" : "Transcribe Complete"), 1)
+          ], 8, Al),
+          s.value ? it("", !0) : (oe(), fe("button", {
+            key: 0,
+            disabled: n.value.length == 0,
+            class: "button-39",
+            onClick: C
+          }, Nl, 8, Rl))
+        ]),
         s.value ? (oe(), fe("div", {
-          key: 2,
+          key: 1,
           class: "shadow-md border rounded-3xl h-5/6 w-full pt-2 px-4 overflow-scroll",
           onDragover: c,
           onDragleave: u,
           onDrop: a
         }, [
-          t.value ? it("", !0) : (oe(), fe("div", Nl, [
+          t.value ? it("", !0) : (oe(), fe("div", Ml, [
             (oe(!0), fe(pe, null, fn(o.value, (R, V) => (oe(), fe("div", {
               key: V,
               class: "w-full gap-1 items-center justify-between flex flex-col"
             }, [
-              W("div", Ml, [
-                W("div", Dl, $e(R.file.name), 1),
+              W("div", Dl, [
+                W("div", Fl, $e(R.file.name), 1),
                 W("div", null, $e(Math.round(R.file.size / 1024 / 1024)) + " MB ", 1),
                 W("span", null, $e(R.status), 1)
               ]),
-              W("div", Fl, [
+              W("div", Ul, [
                 W("span", null, $e(R.text), 1)
               ])
             ]))), 128))
@@ -3930,10 +3932,10 @@ const Rn = (...e) => {
       ], 2)
     ]));
   }
-}), Ll = ".main{align-items:center;justify-content:center;text-align:center}.dropzone-container{border:2px solid #e2e8f0}.hidden-input{opacity:0;overflow:hidden;position:absolute;width:1px;height:1px}.file-label{font-size:20px;display:block;cursor:pointer}.preview-container{display:flex;margin-top:2rem}.preview-card{display:flex;border:1px solid #a2a2a2;padding:5px;margin-left:5px}.preview-img{width:50px;height:50px;border-radius:5px;border:1px solid #a2a2a2;background-color:#a2a2a2}.button-39{background-color:#fff;border:1px solid rgb(209,213,219);border-radius:.5rem;box-sizing:border-box;color:#111827;font-size:.875rem;font-weight:600;line-height:1.25rem;padding:.75rem 1rem;text-align:center;-webkit-text-decoration:none #D1D5DB solid;text-decoration:none #D1D5DB solid;text-decoration-thickness:auto;box-shadow:0 1px 2px #0000000d;cursor:pointer;-moz-user-select:none;user-select:none;-webkit-user-select:none;touch-action:manipulation}.button-39:hover{background-color:#f9fafb}.button-39:focus{outline:2px solid transparent;outline-offset:2px}.button-39:focus-visible{box-shadow:none}", jl = (e, t) => {
+}), jl = ".main{align-items:center;justify-content:center;text-align:center}.dropzone-container{border:2px solid #e2e8f0}.hidden-input{opacity:0;overflow:hidden;position:absolute;width:1px;height:1px}.file-label{font-size:20px;display:block;cursor:pointer}.preview-container{display:flex;margin-top:2rem}.preview-card{display:flex;border:1px solid #a2a2a2;padding:5px;margin-left:5px}.preview-img{width:50px;height:50px;border-radius:5px;border:1px solid #a2a2a2;background-color:#a2a2a2}.button-39{background-color:#fff;border:1px solid rgb(209,213,219);border-radius:.5rem;box-sizing:border-box;color:#111827;font-size:.875rem;font-weight:600;line-height:1.25rem;padding:.75rem 1rem;text-align:center;-webkit-text-decoration:none #D1D5DB solid;text-decoration:none #D1D5DB solid;text-decoration-thickness:auto;box-shadow:0 1px 2px #0000000d;cursor:pointer;-moz-user-select:none;user-select:none;-webkit-user-select:none;touch-action:manipulation}.button-39:hover{background-color:#f9fafb}.button-39:focus{outline:2px solid transparent;outline-offset:2px}.button-39:focus-visible{box-shadow:none}", Hl = (e, t) => {
   const s = e.__vccOpts || e;
   for (const [n, r] of t)
     s[n] = r;
   return s;
-}, Hl = /* @__PURE__ */ jl(Ul, [["styles", [Ll]]]), Vl = /* @__PURE__ */ hl(Hl);
-customElements.define("file-upload", Vl);
+}, Vl = /* @__PURE__ */ Hl(Ll, [["styles", [jl]]]), $l = /* @__PURE__ */ hl(Vl);
+customElements.define("file-upload", $l);

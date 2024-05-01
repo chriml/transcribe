@@ -1,54 +1,78 @@
 <template>
     <div class="mt-4 h-full w-full items-center">
         <div class="main flex flex-col gap-4 justify-items-stretch" :class="{ 'h-5/6': !transcribing }">
-            <h1 class="text-4xl">Transcribe your files</h1>
-            <div v-if="!transcribing" class="rounded-3xl dropzone-container shadow-inner h-5/6 w-full pt-2 px-4 overflow-scroll"
+            <h1 class="text-4xl"><b>Transcribe your files</b></h1>
+            <div v-if="!transcribing"
+                class="flex flex-col justify-center items-center rounded-3xl dropzone-container shadow-inner h-5/6 w-full p-4 overflow-scroll"
                 @dragover="dragover" @dragleave="dragleave" @drop="drop">
                 <input type="file" multiple name="file" id="fileInput" v-show="false" @change="onChange" ref="file"
                     accept="audio/*, video/*" />
 
-                <label for="fileInput" class="text-2xl">
+                <label for="fileInput" class="text-2xl my-4">
                     <div v-if="isDragging">Release to drop files here.</div>
-                    <div class="mb-2 mt-auto" v-else>Drop files here or <u>click here</u> to upload.</div>
+                    <div class="" v-else>Drop files here or <u>click here</u> to upload.</div>
                 </label>
-                <div v-if="!isDragging" class="mb-auto">
-                    <div v-for="file, i in files" :key="i"
-                        class="w-full p-2 items-center justify-between flex flex-row">
-                        <div class="">{{ file.name }}</div>
-                        <div> {{ Math.round(file.size / 1024 / 1024) }} MB </div>
-                        <button class="button-39" @click="removeFile(i)"><span>Delete</span></button>
+                <div v-if="!isDragging" class="w-full">
+                    <div v-for="file, i in files" :key="i" class="w-full p-2 items-center justify-evenly flex flex-row">
+                        <div class="flex flex-row items-center gap-3">
+                            <FontAwesomeIcon v-if="file.type.includes('audio')" icon="microphone" />
+                            <FontAwesomeIcon v-if="file.type.includes('video')" icon="video" />
+                            <div class="">{{ file.name }} ({{ Math.round(file.size / 1024 / 1024) }} MB)</div>
+                        </div>
+                        <button class="delete" @click="removeFile(i)">
+                            <FontAwesomeIcon class="mr-2" icon="trash" />
+                            <span>Delete</span>
+                        </button>
                     </div>
                 </div>
             </div>
-            <button :disabled="files.length == 0" class="button-39" @click="transcribe"><span>{{ transcribing ? 'Cancel'
-            : 'Transcribe' }}</span></button>
-            <button v-if="!transcribing" :disabled="files.length == 0" class="button-39"
-                @click="transcribeSlow"><span>Transcribe Slow</span></button>
+            <div class="flex flex-row gap-2">
+                <button :disabled="files.length == 0" class="button-39" style="" @click="transcribe">
+                    <FontAwesomeIcon class="mr-2" icon="upload" />
+                    {{ transcribing ? 'Cancel' : 'Transcribe' }}
+                </button>
+                <!--  <button v-if="!transcribing" :disabled="files.length == 0" class="button-39"
+                    @click="transcribeSlow"><span>Transcribe Parts</span></button>-->
+            </div>
+
             <div v-if="transcribing" class="shadow-md border  rounded-3xl h-5/6 w-full pt-2 px-4 overflow-scroll"
                 @dragover="dragover" @dragleave="dragleave" @drop="drop">
 
                 <div v-if="!isDragging" class="m-4 ">
                     <div v-for="transcript, i in transcriptions" :key="i"
                         class="w-full gap-1 items-center justify-between flex flex-col">
-                        <div class="w-full items-center justify-between flex flex-row">
-                            <div class="">{{ transcript.file.name }}</div>
-                            <div> {{ Math.round(transcript.file.size / 1024 / 1024) }} MB </div>
+                        <div class="w-full items-center justify-between flex flex-row mb-2">
+                            <div class="flex flex-row items-center gap-3">
+                                <FontAwesomeIcon v-if="transcript.file.type.includes('audio')" icon="microphone" />
+                                <FontAwesomeIcon v-if="transcript.file.type.includes('video')" icon="video" />
+                                <div class="">{{ transcript.file.name }} ({{ Math.round(transcript.file.size / 1024 /
+            1024)
+                                    }} MB)</div>
+                            </div>
                             <span>{{ transcript.status }}</span>
                         </div>
                         <div class="text-left p-4 w-full mb-6 border rounded-2xl">
-                            <span>{{ transcript.text }}</span>
+                            <div class="flex flex-row gap-2 mb-lg mb-5" v-if="transcript.keywords">
+                                Keywords:
+                                <div v-for="keyword in transcript.keywords" :key="i">
+                                    <span class="tag rounded-lg p-1 w-auto">{{ keyword }}</span>
+                                </div>
+                            </div>
+                            <div v-if="transcript.text" class="">{{ transcript.text }}</div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-    <!-- HTML !-->
 </template>
 
 <script setup lang="ts">
+import { faVideo, faMicrophone, faTrash, faUpload } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { ref } from 'vue';
+import { library } from "@fortawesome/fontawesome-svg-core";
+library.add(faVideo, faMicrophone, faTrash, faUpload);
 
 const isDragging = ref(false);
 const transcribing = ref(false);
@@ -101,7 +125,7 @@ async function transcribe() {
             }).then(async (response) => {
                 let result = await response.json();
                 transcriptions.value[index].text = result.transcript;
-                transcriptions.value[index].status = 'Done (' + Math.round(result.time / 1000) + ')';
+                transcriptions.value[index].status = 'Done (' + Math.round(result.time / 1000) + 'sec)';
             });
         }
 
@@ -142,9 +166,14 @@ async function transcribeSlow() {
 
 <style>
 .main {
+    --primary: rgb(255, 54, 165);
     align-items: center;
     justify-content: center;
     text-align: center;
+}
+
+.tag {
+    border: 2px solid var(--primary);
 }
 
 .dropzone-container {
@@ -185,30 +214,31 @@ async function transcribeSlow() {
     background-color: #a2a2a2;
 }
 
+.delete {
+    background-color: #fd6868 !important;
+}
+
+button:hover {
+    box-shadow: 0 0 14px 0px rgba(0, 0, 0, 0.5) !important;
+    filter: saturate(140%);
+}
 
 /* CSS */
-.button-39 {
-    background-color: #FFFFFF;
-    border: 1px solid rgb(209, 213, 219);
-    border-radius: .5rem;
-    box-sizing: border-box;
+button {
+    transition:
+        box-shadow 0.2s,
+        background-color 0.5s;
+    filter: 0.2s;
+    background-color: rgb(255, 54, 165);
+    border-radius: 10px;
     color: #111827;
-    font-size: .875rem;
-    font-weight: 600;
     line-height: 1.25rem;
     padding: .75rem 1rem;
     text-align: center;
-    text-decoration: none #D1D5DB solid;
-    text-decoration-thickness: auto;
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
     cursor: pointer;
     user-select: none;
     -webkit-user-select: none;
     touch-action: manipulation;
-}
-
-.button-39:hover {
-    background-color: rgb(249, 250, 251);
 }
 
 .button-39:focus {
