@@ -1,21 +1,25 @@
+import 'dotenv/config';
+
 import express, { Request, Response } from 'express';
 import multer from 'multer';
-import { transcribe, transcribeBuffer } from './transctibe';
+import { transcribeMultiple, transcribeSingle } from './transctibe';
 import ffmpeg from 'fluent-ffmpeg';
-import { PassThrough, Readable } from 'stream';
+import { Readable } from 'stream';
 import { existsSync, mkdirSync, rmSync } from 'fs';
 import { performance } from 'perf_hooks';
 import cors from 'cors';
+import { checkFile } from './middleware';
 
 const app = express();
-const port = "3000";
+const port = process.env.PORT || "3000";
 
+// allow cross origins
 app.use(cors());
 
 const upload = multer({ storage: multer.memoryStorage() });
-/* 
+
 // Set up Multer for handling multipart/form-data
-const storage = multer.diskStorage({
+/* const storage = multer.diskStorage({
     destination: function (req, file, cb) {
       // Define the destination folder where uploaded files will be stored
       cb(null, 'uploads/');
@@ -32,14 +36,13 @@ const splitDuration: number = 20; // Split every 10 seconds
 app.get('/', async (req: Request, res: Response) => { console.log("Get request"); res.send("Get your files transcrbed!"); });
 
 // Define a route for file upload
-app.post('/uploadFull', upload.single('file'), async (req: Request, res: Response) => {
-    console.log("upload slow received");
-
+app.post('/uploadFull', upload.single('file'), checkFile, async (req: Request, res: Response) => {
     // Retrieve the file from the request object
     const file = req.file;
     if (file) {
+        // transcribe file
         const time = performance.now()
-        const transcript = await transcribeBuffer(file.buffer);
+        const transcript = await transcribeSingle(file.buffer);
         const endtime = performance.now()
         return res.send({ time: endtime - time, transcript });
     } else {
@@ -48,9 +51,7 @@ app.post('/uploadFull', upload.single('file'), async (req: Request, res: Respons
 });
 
 // Define a route for file upload
-app.post('/uploadParts', upload.single('file'), async (req: Request, res: Response) => {
-    console.log("upload received");
-
+app.post('/uploadParts', upload.single('file'), checkFile, async (req: Request, res: Response) => {
     // Retrieve the file from the request object
     const file = req.file;
     if (file) {
@@ -58,45 +59,39 @@ app.post('/uploadParts', upload.single('file'), async (req: Request, res: Respon
         let now = Date.now();
         const outputDir = "tmp/" + now + "/";
 
+        // mk temp dir if not exists
         if (!existsSync(outputDir)) {
             mkdirSync(outputDir, { recursive: true });
         }
 
+        // spit file in segments of <splitDuration> seconds
         ffmpeg({ source: stream })
             .outputOptions('-f', 'segment')
             .outputOptions('-segment_time', splitDuration.toString())
             .outputOptions('-c', 'copy')
             .outputOptions('-map', '0')
             .output(`${outputDir}output_%03d.mp3`)
-
             .on('end', async () => {
-                console.log('Splitting complete');
+                // transcribe segments
                 const time = performance.now()
-
-                const transcript = await transcribe(outputDir);
+                const transcript = await transcribeMultiple(outputDir);
                 const endtime = performance.now()
-                rmSync(outputDir, { recursive: true, force: true });
-                res.send({ time: endtime - time, transcript: transcript.join(' ') });
 
+                // remove tmp directory
+                rmSync(outputDir, { recursive: true, force: true });
+
+                res.send({ time: endtime - time, transcript: transcript.join(' ') });
             })
             .on('error', (err) => {
                 console.error('Error during splitting:', err);
+                return res.status(400).json({ code: 40003, message: "Could not check the file, please try again or upload a different file." });
             })
             .run();
-    }
-
-
-    if (!file) {
+    } else {
         // If no file stream is received, return an error response
         return res.status(400).send('No file uploaded.');
     }
-
-
-    // If file is received, return a success response
 });
-/* 
-// Serve static files from the 'uploads' directory
-app.use(express.static(path.join(__dirname, 'uploads'))); */
 
 export function start() {
     // Start the server

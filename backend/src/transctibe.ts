@@ -1,35 +1,27 @@
-// npm install assemblyai
-
-import { AssemblyAI } from 'assemblyai'
+import { AssemblyAI, FileUploadParams, Transcript } from 'assemblyai'
 import { readdirSync } from 'fs'
-import { Writable } from 'stream'
-import 'dotenv/config';
 
-const client = new AssemblyAI({ apiKey: process.env.ASSEMBLY_AI_SECRET || "" })
+// initialize the AssemblyAI Cleint
+const client = new AssemblyAI({ apiKey: process.env.ASSEMBLY_AI_SECRET || "" });
 
-export async function transcribeBuffer(buffer: Buffer): Promise<any> {
-    /* if (transcript.status === 'error') {
-        console.log(transcript.error)
-    } */
-    return (await client.transcripts.transcribe({ audio: buffer })).text;
+// transcribe one file
+export async function transcribeSingle(source: FileUploadParams): Promise<any> {
+    const transcriptionResult = await client.transcripts.transcribe({ audio: source });
+    return parseResult(transcriptionResult);
 }
 
-export async function transcribe(dir: string): Promise<any> {
-    console.log(dir);
-
+// transcribe directory
+export async function transcribeMultiple(dir: string): Promise<any> {
     let promises = readdirSync(dir).map(file => {
-        return client.transcripts.transcribe({ audio: dir + file });
+        return client.transcripts.transcribe({ audio: file });;
     });
-
-    /* if (transcript.status === 'error') {
-        console.log(transcript.error)
-    } */
-    return (await Promise.all(promises)).map(res => res.text);
+    return (await Promise.all(promises)).map(parseResult);
 }
 
-export async function transcribeFile(file: any): Promise<any> {
-    /* if (transcript.status === 'error') {
-        console.log(transcript.error)
-    } */
-    return (await client.transcripts.transcribe({ audio: file })).text
+// check status and adjust transcript result accordingly
+function parseResult(result: Transcript) {
+    if (result.status === 'error') {
+        return "Could not parse transcript. Please try again...";
+    }
+    return result.text
 }
