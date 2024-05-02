@@ -289,6 +289,8 @@ button {
     -webkit-user-select: none;
     touch-action: manipulation;
     display: flex;
+    align-items: center;
+    justify-items: center;
 }
 
 .button-39:focus {
