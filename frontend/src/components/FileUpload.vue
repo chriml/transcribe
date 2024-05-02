@@ -16,7 +16,8 @@
                         <span>Drop files here or <u>click here</u> to upload.</span>
                     </div>
                 </label>
-                <div :style="{ 'pointer-events': isDragging ? 'none' : 'auto' }" v-if="!isDragging" class="w-full overflow-scroll">
+                <div :style="{ 'pointer-events': isDragging ? 'none' : 'auto' }" v-if="!isDragging"
+                    class="w-full overflow-scroll">
                     <div v-for="file, i in files" :key="i"
                         class="w-full p-2 items-center justify-between flex flex-row">
                         <div class="flex flex-row items-center gap-3">
@@ -56,6 +57,13 @@
                             <span>{{ transcript.status }}</span>
                         </div>
                         <div class="text-left p-4 w-full mb-6 border rounded-2xl">
+                            <div v-if="!transcript.keywords || !transcript.text"
+                                class="flex w-full text-center justify-center">
+                                <div style="color: var(--primary);"
+                                    class="text-center h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-e-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
+                                    role="status">
+                                </div>
+                            </div>
                             <div class="flex flex-row flex-wrap max-w-full h-auto items-center w-full gap-2 mb-lg mb-5"
                                 v-if="transcript.keywords">
                                 Keywords:
