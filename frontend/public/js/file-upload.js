@@ -6804,7 +6804,7 @@ const ad = { class: "flex mt-4 h-full w-full justify-center" }, sd = /* @__PURE_
         sd,
         n.value ? Ie("", !0) : (te(), ue("div", {
           key: 0,
-          class: "flex-col flex-1 justify-center items-center rounded-3xl dropzone-container shadow-inner h-5/6 w-full overflow-auto p-4",
+          class: "flex flex-col justify-center items-center rounded-3xl dropzone-container shadow-inner h-5/6 w-full p-4",
           onDragover: o,
           onDragleave: tf(l, ["prevent", "stop"]),
           onDrop: f
@@ -6838,7 +6838,7 @@ const ad = { class: "flex mt-4 h-full w-full justify-center" }, sd = /* @__PURE_
           t.value ? Ie("", !0) : (te(), ue("div", {
             key: 0,
             style: Pt({ "pointer-events": t.value ? "none" : "auto" }),
-            class: "w-full"
+            class: "w-full overflow-scroll"
           }, [
             (te(!0), ue(we, null, yr(r.value, (k, j) => (te(), ue("div", {
               key: j,

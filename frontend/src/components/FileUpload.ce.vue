@@ -3,7 +3,7 @@
         <div class="main flex flex-col grow gap-4 justify-items-stretch max-w-4xl" :class="{ 'h-5/6': !transcribing }">
             <h1 class="text-4xl"><b>Transcribe your files</b></h1>
             <div v-if="!transcribing"
-                class="flex-col flex-1 justify-center items-center rounded-3xl dropzone-container shadow-inner h-5/6 w-full overflow-auto p-4"
+                class="flex flex-col justify-center items-center rounded-3xl dropzone-container shadow-inner h-5/6 w-full p-4"
                 @dragover="dragover" @dragleave.prevent.stop="dragleave" @drop="drop">
                 <input type="file" multiple name="file" id="fileInput" v-show="false" @change="onChange" ref="file"
                     accept="audio/*, video/*" :style="{ 'pointer-events': isDragging ? 'none' : 'auto' }" />
@@ -16,7 +16,7 @@
                         <span>Drop files here or <u>click here</u> to upload.</span>
                     </div>
                 </label>
-                <div :style="{ 'pointer-events': isDragging ? 'none' : 'auto' }" v-if="!isDragging" class="w-full">
+                <div :style="{ 'pointer-events': isDragging ? 'none' : 'auto' }" v-if="!isDragging" class="w-full overflow-scroll">
                     <div v-for="file, i in files" :key="i"
                         class="w-full p-2 items-center justify-between flex flex-row">
                         <div class="flex flex-row items-center gap-3">
