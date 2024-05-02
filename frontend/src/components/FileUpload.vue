@@ -12,7 +12,7 @@
                     class="text-2xl my-4">
                     <div v-if="isDragging">Release to drop files here.</div>
                     <div class="flex flex-col" v-else>
-                        <FontAwesomeIcon size="2xl" icon="file-import" />
+                        <FontAwesomeIcon style="height: 50px;" icon="file-import" />
                         <span>Drop files here or <u>click here</u> to upload.</span>
                     </div>
                 </label>
@@ -21,13 +21,14 @@
                     <div v-for="file, i in files" :key="i"
                         class="w-full p-2 items-center justify-between flex flex-row">
                         <div class="flex flex-row items-center gap-3">
-                            <FontAwesomeIcon v-if="file.type.includes('audio')" icon="microphone" />
-                            <FontAwesomeIcon v-if="file.type.includes('video')" icon="video" />
+                            <FontAwesomeIcon style="height: 20px;" v-if="file.type.includes('audio')"
+                                icon="microphone" />
+                            <FontAwesomeIcon style="height: 20px;" v-if="file.type.includes('video')" icon="video" />
                             <div class="">{{ tranformText(file.name) }} ({{ Math.round(file.size / 1024 / 1024) }} MB)
                             </div>
                         </div>
                         <button class="delete" @click="removeFile(i)">
-                            <FontAwesomeIcon class="mr-2" icon="trash" />
+                            <FontAwesomeIcon style="height: 15px;" class="mr-2" icon="trash" />
                             <span>Delete</span>
                         </button>
                     </div>
@@ -35,7 +36,7 @@
             </div>
             <div class="flex flex-row gap-2">
                 <button :disabled="files.length == 0" class="button-39" style="" @click="transcribe">
-                    <FontAwesomeIcon class="mr-2" :icon="!transcribing ? 'upload' : 'cancel'" />
+                    <FontAwesomeIcon style="height: 15px;" class="mr-2" :icon="!transcribing ? 'upload' : 'cancel'" />
                     {{ transcribing ? 'Cancel' : 'Transcribe' }}
                 </button>
                 <!--  <button v-if="!transcribing" :disabled="files.length == 0" class="button-39"
@@ -48,8 +49,10 @@
                         class="w-full gap-1 items-center justify-between flex flex-col">
                         <div class="w-full items-center justify-between flex flex-row mb-2">
                             <div class="flex flex-row items-center gap-3">
-                                <FontAwesomeIcon v-if="transcript.file.type.includes('audio')" icon="microphone" />
-                                <FontAwesomeIcon v-if="transcript.file.type.includes('video')" icon="video" />
+                                <FontAwesomeIcon style="height: 20px;" v-if="transcript.file.type.includes('audio')"
+                                    icon="microphone" />
+                                <FontAwesomeIcon style="height: 20px;" v-if="transcript.file.type.includes('video')"
+                                    icon="video" />
                                 <div class="">{{ transcript.file.name }} ({{ Math.round(transcript.file.size / 1024 /
             1024)
                                     }} MB)</div>
@@ -195,7 +198,23 @@ async function transcribeSlow() {
 </script>
 
 <style>
+@import url('https://fonts.googleapis.com/css?family=Inter');
+
+/* color palette from <https://github.com/vuejs/theme> */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 .main {
+    font-family: 'Inter', 'sans-serif';
+    font-weight: normal;
+    line-height: 1;
+    font-size: 15px;
+    font-family: 'Inter', 'sans-serif';
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
     --primary: rgb(255, 54, 165);
     align-items: center;
     justify-content: center;
@@ -269,6 +288,7 @@ button {
     user-select: none;
     -webkit-user-select: none;
     touch-action: manipulation;
+    display: flex;
 }
 
 .button-39:focus {
