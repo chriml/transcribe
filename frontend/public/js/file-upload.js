@@ -6741,7 +6741,7 @@ const ad = { class: "flex mt-4 h-full w-full justify-center" }, sd = /* @__PURE_
   /* @__PURE__ */ rn(" to upload.")
 ], -1), fd = { class: "flex flex-row items-center gap-3" }, ud = { class: "" }, dd = ["onClick"], md = /* @__PURE__ */ ee("span", null, "Delete", -1), pd = { class: "flex flex-row gap-2" }, hd = ["disabled"], vd = {
   key: 1,
-  class: "shadow-md border rounded-3xl h-5/6 w-full pt-2 px-4 overflow-scroll"
+  class: "shadow-md border rounded-3xl h-5/6 w-full pt-2 px-4 overflow-scroll mb-2"
 }, gd = {
   key: 0,
   class: "m-4"

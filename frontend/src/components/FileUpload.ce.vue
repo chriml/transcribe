@@ -41,8 +41,8 @@
                     @click="transcribeSlow"><span>Transcribe Parts</span></button>-->
             </div>
 
-            <div v-if="transcribing" class="shadow-md border rounded-3xl h-5/6 w-full pt-2 px-4 overflow-scroll">
-                <div v-if="!isDragging" class="m-4 ">
+            <div v-if="transcribing" class="shadow-md border rounded-3xl h-5/6 w-full pt-2 px-4 overflow-scroll mb-2">
+                <div v-if="!isDragging" class="m-4">
                     <div v-for="transcript, i in transcriptions" :key="i"
                         class="w-full gap-1 items-center justify-between flex flex-col">
                         <div class="w-full items-center justify-between flex flex-row mb-2">
@@ -56,7 +56,7 @@
                             <span>{{ transcript.status }}</span>
                         </div>
                         <div class="text-left p-4 w-full mb-6 border rounded-2xl">
-                            <div class="flex flex-row flex-wrap max-w-full h-auto items-center	 w-full gap-2 mb-lg mb-5"
+                            <div class="flex flex-row flex-wrap max-w-full h-auto items-center w-full gap-2 mb-lg mb-5"
                                 v-if="transcript.keywords">
                                 Keywords:
                                 <div class="my-1" v-for="keyword in transcript.keywords" :key="i">
