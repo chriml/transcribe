@@ -6,14 +6,22 @@ const client = new AssemblyAI({ apiKey: process.env.ASSEMBLY_AI_SECRET || "" });
 
 // transcribe one file
 export async function transcribeSingle(source: FileUploadParams): Promise<TranscriptResult> {
-    const transcriptionResult = await client.transcripts.transcribe({ audio: source, auto_highlights: true });
+    const transcriptionResult = await client.transcripts.transcribe({
+        audio: source,
+        auto_highlights: true,
+        language_detection: true
+    });
     return parseResult(transcriptionResult);
 }
 
 // transcribe directory
 export async function transcribeMultiple(dir: string): Promise<TranscriptResult[]> {
     let promises = readdirSync(dir).map(file => {
-        return client.transcripts.transcribe({ audio: file });;
+        return client.transcripts.transcribe({
+            audio: file,
+            auto_highlights: true,
+            language_detection: true
+        });
     });
     return (await Promise.all(promises)).map(parseResult);
 }
