@@ -6,14 +6,24 @@
   <link rel="icon" href="/favicon.ico">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="/js/file-upload.umd.cjs"></script>
+
   <title>Transcribe</title>
 </head>
 
 <body>
-  <!--<file-upload class="h-screen w-full"></file-upload>-->
+  <file-upload class="h-screen w-full"></file-upload>
 
   <div id="app"></div>
   <script type="module" src="/src/main.ts"></script>
+  <script>
+    const fileUpload = document.querySelector("file-upload");
+    fileUpload.addEventListener('transcription', function (event) {
+      if (event && event.detail && event.detail.length > 0) {
+        console.log("Transcription update: ", event.detail[0] );
+      }
+    });
+
+  </script>
 </body>
 
 </html>

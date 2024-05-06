@@ -86,9 +86,11 @@
 <script setup lang="ts">
 import { faVideo, faMicrophone, faTrash, faUpload, faCancel, faFileImport } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { library } from "@fortawesome/fontawesome-svg-core";
 library.add(faVideo, faMicrophone, faTrash, faUpload, faCancel, faFileImport);
+
+const emit = defineEmits(['transcription'])
 
 const isDragging = ref(false);
 const transcribing = ref(false);
@@ -160,6 +162,7 @@ async function transcribe() {
                 transcriptions.value[index].text = result.text;
                 transcriptions.value[index].keywords = result.keywords;
                 transcriptions.value[index].status = 'Done (' + Math.round(result.time / 1000) + 'sec)';
+                emit('transcription', transcriptions.value[index]);
             });
         }
 
@@ -176,7 +179,7 @@ async function transcribeSlow() {
                 file: files.value[index],
                 status: 'transcribing...',
                 text: '',
-                duration: ''
+                duration: 0
             });
 
             const data = new FormData();
@@ -187,6 +190,7 @@ async function transcribeSlow() {
             }).then(async (response) => {
                 let result = await response.json();
                 transcriptions.value[index].text = result.transcript;
+                transcriptions.value[index].duration = result.time;
                 transcriptions.value[index].status = 'Completed (' + Math.round(result.time / 1000) + 'sec)';
             });
         }
