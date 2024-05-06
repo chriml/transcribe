@@ -77,19 +77,19 @@ Send file to backend to get it transcribed.
 
 HTTP Request Parmas: 
 
+```
 URL: https://transcribe-test.fly.dev/uploadFull
-
 Method: POST
-
 Body: FormData (multipart form with file in field "files")
+```
 
 Response in JSON format:
 
+```
 time: execution time of Assembly AI
-
 text: Transcribed text
-
 keywords: Highlights returned from Assembly AI
+```
 
 Example: 
 
