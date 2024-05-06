@@ -13,8 +13,6 @@
 
 # Manual
 
----
-
 ## Frontend integration
 
 The UI can is provided as Web Component. The Web Component is deployed with the frontend itself on netlify and can be found unter following URL: https://file-upload-cm.netlify.app/js/file-upload.umd.cjs
@@ -41,7 +39,8 @@ In `event.detail` the transcription result is returned in following format:
 	"status":"<Status text>",
 	"text":"<Transcription text>",
 	"duration": <Amount of milliseconds it took>,
-	"keywords":[<The keywords of the transcript>]}'
+	"keywords":[<The keywords of the transcript>]
+}
 ```
 
 Example `index.html`: 
