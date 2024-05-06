@@ -73,9 +73,9 @@ Example `index.html`:
 ---
 ## Backend API
 
-Send file to backend to get it transcribed.
+Send a file to backend to get it transcribed.
 
-HTTP Request Parmas: 
+HTTP Request Params: 
 
 ```
 URL: https://transcribe-test.fly.dev/uploadFull
@@ -91,7 +91,7 @@ text: Transcribed text
 keywords: Highlights returned from Assembly AI
 ```
 
-Example: 
+Example (JS-Fetch): 
 
 ```
 var formdata = new FormData();
