@@ -1,5 +1,11 @@
-transcribe
+# transcribe
 
-Backend Docs: [a relative link](backend/README.md)
+[Backend Docs](backend/README.md)
 
-Frontend Docs: [a relative link](frontend/README.md)
+[Frontend Docs](frontend/README.md)
+
+## Live Links
+
+[Backend](https://transcribe-test.fly.dev )
+
+[Frontend](https://file-upload-cm.netlify.app/)
