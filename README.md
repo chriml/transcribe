@@ -31,7 +31,7 @@ The web component is loaded using inside the body tag.
 
 When a transcript completed successfully an event is triggered. To catch the event an event listener can be attached listening to the "transcription". 
 
-In `event.detail` the transcription result is returned in following format:
+In `event.detail[0]` the transcription result is returned in following format:
 
 ```
 {
@@ -76,14 +76,19 @@ Example `index.html`:
 Send file to backend to get it transcribed.
 
 HTTP Request Parmas: 
+
 URL: https://transcribe-test.fly.dev/uploadFull
+
 Method: POST
+
 Body: FormData (multipart form with file in field "files")
 
 Response in JSON format:
 
 time: execution time of Assembly AI
+
 text: Transcribed text
+
 keywords: Highlights returned from Assembly AI
 
 Example: 
