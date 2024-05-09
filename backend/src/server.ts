@@ -31,7 +31,7 @@ const upload = multer({ storage: multer.memoryStorage() });
   }); */
 
 // const upload = multer({ storage: storage });
-const splitDuration: number = 20; // Split every 10 seconds
+const splitDuration: number = 60; // Split every 10 seconds
 
 app.get('/', async (req: Request, res: Response) => { console.log("Get request"); res.send("Get your files transcrbed!"); });
 
@@ -70,7 +70,7 @@ app.post('/uploadParts', upload.single('file'), checkFile, async (req: Request, 
             .outputOptions('-segment_time', splitDuration.toString())
             .outputOptions('-c', 'copy')
             .outputOptions('-map', '0')
-            .output(`${outputDir}output_%03d.mp3`)
+            .output(`${outputDir + file.filename}`)
             .on('end', async () => {
                 // transcribe segments
                 const time = performance.now()

@@ -18,7 +18,7 @@ export async function transcribeSingle(source: FileUploadParams): Promise<Transc
 export async function transcribeMultiple(dir: string): Promise<TranscriptResult[]> {
     let promises = readdirSync(dir).map(file => {
         return client.transcripts.transcribe({
-            audio: file,
+            audio: dir + file,
             auto_highlights: true,
             language_detection: true
         });
